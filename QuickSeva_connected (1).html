@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>QuickSeva | Home Services</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Arial, sans-serif;background:#f4f7fb;color:#14243a}header{display:flex;justify-content:space-between;align-items:center;padding:17px 6%;background:#fff;border-bottom:1px solid #e5ebf3;position:sticky;top:0}.logo{font-weight:900;font-size:26px;color:#172b49}.logo span{color:#2869f6}nav button{border:0;background:white;padding:10px 13px;font-weight:bold;cursor:pointer;color:#172b49}nav button.active{background:#e8efff;color:#215be0;border-radius:9px}
+.hero{padding:50px 6%;background:linear-gradient(120deg,#e8f0ff,#e9fbf4);display:flex;justify-content:space-between;align-items:center;gap:30px}.hero h1{font-size:clamp(34px,5vw,54px);margin:0 0 14px;letter-spacing:-1.5px}.hero h1 span{color:#2869f6}.hero p{color:#5d6b7d;line-height:1.6}.illustration{font-size:100px;background:#2869f6;color:white;border-radius:28px;padding:28px}
+main{max-width:1100px;margin:0 auto;padding:38px 5%}.panel{display:none}.panel.active{display:block}.heading{margin-bottom:24px}.heading h2{margin:0 0 8px;font-size:30px}.heading p{color:#6a7788}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin:20px 0 32px}.card{background:white;border:1px solid #e3eaf3;border-radius:16px;padding:18px;cursor:pointer}.card.selected{border:2px solid #2869f6}.card .emoji{font-size:32px}.card h3{margin:9px 0}.card p{color:#6a7788;font-size:14px}.card b{color:#2869f6}
+form{background:#fff;border:1px solid #e2eaf3;border-radius:18px;padding:23px;display:grid;grid-template-columns:1fr 1fr;gap:15px}label{font-size:13px;font-weight:bold;color:#46576b}input,select,textarea{width:100%;padding:12px;margin-top:7px;border:1px solid #d6e0ec;border-radius:9px;font:inherit;background:#fff}textarea{min-height:75px;resize:vertical}.full{grid-column:1/-1}.submit{background:#2869f6;color:white;border:0;border-radius:11px;padding:14px;font-weight:bold;cursor:pointer}.note{color:#6b7787;font-size:13px;line-height:1.5}.notice{display:none;padding:14px;background:#e2f8ec;color:#145b3a;border-radius:10px;grid-column:1/-1;font-weight:bold}
+footer{text-align:center;padding:25px;background:white;color:#7a8796}@media(max-width:650px){.hero{flex-direction:column;align-items:flex-start}.illustration{font-size:70px;padding:18px}form{grid-template-columns:1fr}.full{grid-column:auto}header{padding:14px 4%}nav button{padding:8px}}
+</style><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script></head>
+<body>
+<header><div class="logo">Quick<span>Seva</span></div><nav><button class="active" onclick="show('customer',this)">Book Service</button><button onclick="show('worker',this)">Join as Professional</button></nav></header>
+<section class="hero"><div><h1>Home help,<br><span>made quick.</span></h1><p>Book trusted local professionals for everyday home services.<br>Or join QuickSeva and grow your service business.</p></div><div class="illustration">🏠🛠️</div></section>
+<main>
+<section id="customer" class="panel active"><div class="heading"><h2>Book a home service</h2><p>Choose a service and submit your booking request.</p></div>
+<div class="cards">
+<div class="card" onclick="pick(this,'Electrician')"><div class="emoji">💡</div><h3>Electrician</h3><p>Switches, wiring, repairs</p><b>From ₹199</b></div>
+<div class="card" onclick="pick(this,'Plumber')"><div class="emoji">🚰</div><h3>Plumber</h3><p>Leaks, taps, pipes</p><b>From ₹199</b></div>
+<div class="card" onclick="pick(this,'AC Repair')"><div class="emoji">❄️</div><h3>AC Repair</h3><p>AC servicing and repair</p><b>From ₹499</b></div>
+<div class="card" onclick="pick(this,'Home Cleaning')"><div class="emoji">🧹</div><h3>Home Cleaning</h3><p>Home cleaning services</p><b>From ₹799</b></div>
+<div class="card" onclick="pick(this,'RO Repair')"><div class="emoji">💧</div><h3>RO Repair</h3><p>Water purifier maintenance</p><b>From ₹299</b></div>
+<div class="card" onclick="pick(this,'Appliance Repair')"><div class="emoji">🔧</div><h3>Appliance Repair</h3><p>Home appliance help</p><b>Estimate</b></div>
+</div>
+<form id="customerForm"><div><label>Customer name<input name="name" required placeholder="Full name"></label></div><div><label>Mobile number<input name="phone" required pattern="[0-9]{10}" placeholder="10 digit number"></label></div><div><label>Service<select id="service" name="service" required><option value="">Choose service</option><option>Electrician</option><option>Plumber</option><option>AC Repair</option><option>Home Cleaning</option><option>RO Repair</option><option>Appliance Repair</option><option>Other</option></select></label></div><div><label>Preferred date<input type="date" name="date" required></label></div><div class="full"><label>Full address / area<textarea name="address" required placeholder="House no., street, locality, city"></textarea></label></div><div class="full"><label>Issue details (optional)<textarea name="details" placeholder="What do you need help with?"></textarea></label></div><button class="submit full">Submit booking request</button><div class="notice" id="customerNotice"></div></form>
+</section>
+<section id="worker" class="panel"><div class="heading"><h2>Join QuickSeva as a professional</h2><p>Register your skills. Your profile will need admin approval before you can receive bookings.</p></div>
+<form id="workerForm"><div><label>Full name<input name="name" required placeholder="Name as per ID"></label></div><div><label>Mobile number<input name="phone" required pattern="[0-9]{10}" placeholder="10 digit number"></label></div><div><label>Service / skill<select name="skill" required><option value="">Choose your skill</option><option>Electrician</option><option>Plumber</option><option>AC Technician</option><option>Home Cleaning</option><option>RO Technician</option><option>Appliance Repair</option><option>Pest Control</option><option>Other</option></select></label></div><div><label>Experience<select name="experience" required><option value="">Select experience</option><option>Less than 1 year</option><option>1–3 years</option><option>3–5 years</option><option>5+ years</option></select></label></div><div><label>Service area<input name="area" required placeholder="e.g. Bowenpally, Secunderabad"></label></div><div><label>Preferred work type<select name="worktype" required><option value="">Choose</option><option>Full-time</option><option>Part-time</option><option>On-call</option></select></label></div><div class="full"><label>Briefly describe your skills<textarea name="details" required placeholder="Experience, tools, types of repairs"></textarea></label></div><div class="full"><label>Reference / ID verification note<textarea name="verification" placeholder="We will verify identity securely during onboarding. Do not enter Aadhaar number here."></textarea></label></div><button class="submit full">Submit professional registration</button><div class="notice" id="workerNotice"></div></form>
+<p class="note">Connected to Supabase: submissions are stored in QuickSeva database. Do not enter Aadhaar numbers or sensitive ID images. Do not collect Aadhaar numbers or sensitive ID images through this demo.</p>
+</section></main><footer>© 2026 QuickSeva • Local home services • Prototype</footer>
+<script>
+function show(id,btn){document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));btn.classList.add('active');window.scrollTo({top:0,behavior:'smooth'})}
+function pick(el,val){document.querySelectorAll('.card').forEach(c=>c.classList.remove('selected'));el.classList.add('selected');document.getElementById('service').value=val}
+const supabaseClient = window.supabase.createClient(
+  'https://krbeaafkgjobhtthrhue.supabase.co',
+  'sb_publishable_YjAu2LBnYicno6lcpMM4kQ_0h-dz-gR'
+);
+
+function showNotice(noticeId, message, isError=false) {
+  const n = document.getElementById(noticeId);
+  n.style.display = 'block';
+  n.textContent = message;
+  n.style.background = isError ? '#fde8e8' : '#e2f8ec';
+  n.style.color = isError ? '#8b1e1e' : '#145b3a';
+  n.scrollIntoView({behavior:'smooth',block:'center'});
+}
+
+document.getElementById('customerForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const form = e.currentTarget;
+  const data = {
+    customer_name: form.elements.name.value.trim(),
+    mobile_number: form.elements.phone.value.trim(),
+    service: form.elements.service.value,
+    preferred_date: form.elements.date.value,
+    address: form.elements.address.value.trim(),
+    details: form.elements.details.value.trim()
+  };
+  const button = form.querySelector('.submit');
+  button.disabled = true;
+  button.textContent = 'Submitting...';
+  const { error } = await supabaseClient.from('bookings').insert([data]);
+  button.disabled = false;
+  button.textContent = 'Submit booking request';
+  if (error) {
+    showNotice('customerNotice', 'Booking submit nahi hua. Please dobara try karein. Error: ' + error.message, true);
+  } else {
+    form.reset();
+    document.querySelectorAll('.card').forEach(c => c.classList.remove('selected'));
+    showNotice('customerNotice', 'Booking successfully submit ho gayi! QuickSeva team aapse contact karegi.');
+  }
+});
+
+document.getElementById('workerForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const form = e.currentTarget;
+  const data = {
+    worker_name: form.elements.name.value.trim(),
+    mobile_number: form.elements.phone.value.trim(),
+    skill: form.elements.skill.value,
+    experience: form.elements.experience.value,
+    area: form.elements.area.value.trim(),
+    worktype: form.elements.worktype.value,
+    details: form.elements.details.value.trim(),
+    verification: form.elements.verification.value.trim()
+  };
+  const button = form.querySelector('.submit');
+  button.disabled = true;
+  button.textContent = 'Submitting...';
+  const { error } = await supabaseClient.from('workers').insert([data]);
+  button.disabled = false;
+  button.textContent = 'Submit professional registration';
+  if (error) {
+    showNotice('workerNotice', 'Registration submit nahi hua. Please dobara try karein. Error: ' + error.message, true);
+  } else {
+    form.reset();
+    showNotice('workerNotice', 'Registration successfully submit ho gayi! QuickSeva team verification ke liye contact karegi.');
+  }
+});
+</script></body></html>
