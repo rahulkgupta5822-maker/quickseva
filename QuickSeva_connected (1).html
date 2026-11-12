@@ -85,7 +85,7 @@ document.getElementById('workerForm').addEventListener('submit', async (e) => {
     details: form.elements.details.value.trim(),
     verification: form.elements.verification.value.trim()
   };
-  const button = form.querySelector('.submit');
+  const -button = form.querySelector('.submit');
   button.disabled = true;
   button.textContent = 'Submitting...';
   const { error } = await supabaseClient.from('workers').insert([data]);
